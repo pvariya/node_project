@@ -1,18 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/user.Schema.js");
-// const multer = require("multer");
+const mongoose = require("mongoose");
 const { sendMail } = require("../service/sendMail.js");
-const otps = new Map();
-
-// const storage = multer.diskStorage({
-//   destination: "uploads",
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + file.originalname);
-//   },
-// });
-
-// const upload = multer({ storage: storage });
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -101,21 +91,81 @@ const verifyUser = async (req, res) => {
   }
 };
 
-const getUser = async (req, res) => {
+const getAllUser = async (req, res) => {
   try {
-    let user = await User.find();
+    let user = await User.find({ role: "USER" });
     res.json(user);
   } catch (error) {
-    res.json({ error: error.message });
+    res.json({ "getAlluser error": error.message });
   }
 };
 
+const getUser = async (req, res) => {
+  let userId = req.params.id;
+  try {
+    let data = await User.findById(userId);
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ msg: "User not found" });
+    }
+  } catch (error) {
+    res.json({ "getuser error": error.message });
+  }
+};
 const getAdmin = async (req, res) => {
   try {
     let admin = await User.find({ role: "ADMIN" });
     res.json(admin);
   } catch (error) {
-    console.log(error.message);
+    res.json({ "getAdmin error": error.message });
   }
 };
-module.exports = { signUp, login, getUser, getAdmin, verifyUser };
+
+const deletUser = async (req, res) => {
+  let { id } = req.params;
+  try {
+    let data = await User.findByIdAndDelete(id);
+    res.status(200).json(data);
+  } catch (error) {
+    res.json({ "error delet user": error.message });
+  }
+};
+
+const deletManyUser = async (req, res) => {
+  let { ids } = req.params;
+  try {
+    const idArray = ids.split(",").map((id) => new mongoose.Types.ObjectId(id));
+    let data = await User.deleteMany({ _id: { $in: idArray } });
+    res.json(data);
+  } catch (error) {
+    res.json({ "error delet many": error.message });
+  }
+};
+
+const verifyAdmin = async (req, res) => {
+  const {id,email} = req.params;
+  let data = await User.findByIdAndUpdate(id,{ isVarified: true }, { new: true });
+  if (!data) {
+    return res.status(404).json({ msg: "admin not found" });
+  } else {
+    let html = `<div >  
+    <h1>hello ${data.username}</h1>
+   <h2>admin verified</h2>
+   
+ </div>`;
+   await sendMail(email, "Verify", html)
+    return res.status(200).json({ msg: "admin verified " });
+  }
+};
+module.exports = {
+  deletUser,
+  signUp,
+  login,
+  getAllUser,
+  getAdmin,
+  verifyUser,
+  getUser,
+  deletManyUser,
+  verifyAdmin,
+};

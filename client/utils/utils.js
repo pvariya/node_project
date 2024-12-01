@@ -23,6 +23,6 @@ export const isSuperAdmin = () => {
 export const isActiveAccount = () => {
   let decodedToken = getUserData();
   return decodedToken.isActive;
-};
+};  
 
 export default getUserData;
