@@ -18,7 +18,7 @@ export const isAdmin = () => {
 
 export const isSuperAdmin = () => {
   let decodedToken = getUserData();
-  return decodedToken.role == "SUPER_ADMIN";
+  return decodedToken?.role == "SUPER_ADMIN";
 };
 export const isActiveAccount = () => {
   let decodedToken = getUserData();

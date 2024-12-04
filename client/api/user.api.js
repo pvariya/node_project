@@ -1,5 +1,6 @@
 const baseUrl = "http://localhost:8090";
-// import Cookies from "js-cookie";
+import { getToken } from "../utils/Cookies.js";
+
 const userApi = {
   signUp: async (user) => {
     try {
@@ -18,7 +19,7 @@ const userApi = {
       } else {
         alert("user already exists");
         console.error("Token missing in the response:", res);
-        window.location.href ="/pages/login.html"
+        window.location.href = "/pages/login.html";
       }
     } catch (error) {
       console.error("Signup Error:", error);
@@ -42,6 +43,32 @@ const userApi = {
       console.log(data);
     } catch (error) {
       console.error(error);
+    }
+  },
+  delete: async (id) => {
+    try {
+      await fetch(`${baseUrl}/user/deleteUser/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getToken}`,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+  verifyAdmin: async (id) => {
+    try {
+      let req = await fetch(`${baseUrl}/user/verifyAdmin/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${getToken}`,
+        },
+      });
+      let res = await req.json();
+      console.log(res);
+    } catch (error) {
+      console.log(error.message);
     }
   },
 };
