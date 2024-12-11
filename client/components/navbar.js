@@ -6,11 +6,11 @@ const logOut = () => {
   window.location.href = "/pages/login.html";
 };
 const navbar = (navbar) => {
-  let logUotTag = ``;
+  let logOutTag = ``;
   if (decodedToken) {
-    logUotTag = `<a class="nav-link active" aria-current="page" id=logout> Logout </a>`;
+    logOutTag = `<a class="nav-link active" aria-current="page" id=logout> Logout </a>`;
   } else {
-    logUotTag = `<a class="nav-link active" aria-current="page" href="/pages/login.html">
+    logOutTag = `<a class="nav-link active" aria-current="page" href="/pages/login.html">
       logIn
     </a>`;
   }
@@ -33,7 +33,7 @@ const navbar = (navbar) => {
               <a class="nav-link active" aria-current="page" href="/pages/cart.html">cart</a>
             </li>
              <li class="nav-item">
-              ${logUotTag}
+              ${logOutTag}
             </li>
              <li class="nav-item">
               <a class="nav-link" ${
@@ -51,9 +51,9 @@ const navbar = (navbar) => {
 
 export default navbar;
 
-document.addEventListener("DOMContentLoaded",()=>{
-  let logUotbtn  = document.getElementById("logout");
+document.addEventListener("DOMContentLoaded", () => {
+  let logUotbtn = document.getElementById("logout");
   if (logUotbtn) {
     logUotbtn.addEventListener("click", logOut);
   }
-})  
+});

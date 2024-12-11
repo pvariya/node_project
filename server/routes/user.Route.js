@@ -9,6 +9,7 @@ const {
   getUser,
   deletUser,
   verifyAdmin,
+  deleteAdmin,
 } = require("../controllers/user.controller");
 const decoded = require("../middleware/decodeJWT");
 const { superAdmin } = require("../middleware/superAdmin");
@@ -24,4 +25,6 @@ userRouter.delete("/deletAllUser/:ids", deletManyUser);
 userRouter.get("/getUser/:id", getUser);
 userRouter.delete("/deleteUser/:id", deletUser);
 userRouter.patch("/verifyAdmin/:id", decoded, superAdmin, verifyAdmin);
+userRouter.delete("/deleteAdmin/:id", decoded, superAdmin, deleteAdmin);
+
 module.exports = userRouter;

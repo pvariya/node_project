@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { promises } = require("nodemailer/lib/xoauth2");
+// const { promises } = require("nodemailer/lib/xoauth2");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({

@@ -11,7 +11,7 @@ const adminData = (e) => {
     username: value("#username"),
     email: value("#email"),
     password: value("#password"),
-    Number: value("#number"),
+    Number: value("#number"),   
     role: "ADMIN",
     isActive: false,
   };

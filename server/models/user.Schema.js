@@ -13,6 +13,6 @@ const userSchema = mongoose.Schema({
   isActive: { type: Boolean, default: true },
   isVarified: { type: Boolean, default: false },
 });
-
+  
 let User = mongoose.model("User", userSchema);
 module.exports = User;

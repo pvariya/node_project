@@ -1,5 +1,4 @@
 let { token } = Cookies.get();
-
 export const getToken = () => token;
 
 const getUserData = () => {
@@ -23,6 +22,6 @@ export const isSuperAdmin = () => {
 export const isActiveAccount = () => {
   let decodedToken = getUserData();
   return decodedToken.isActive;
-};  
+};
 
 export default getUserData;

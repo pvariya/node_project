@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.Schema.js");
 const mongoose = require("mongoose");
 const { sendMail } = require("../service/sendMail.js");
+let otps = new Map();
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -35,6 +36,7 @@ const signUp = async (req, res) => {
       }
       return res.status(201).json({
         msg: "User created",
+        user: user,
         token,
         isVarified: user.isVarified,
       });
@@ -143,21 +145,6 @@ const deletManyUser = async (req, res) => {
   }
 };
 
-// const verifyAdmin = async (req, res) => {
-//   const {id,email} = req.params;
-//   let data = await User.findByIdAndUpdate(id,{ isVarified: true }, { new: true });
-//   if (!data) {
-//     return res.status(404).json({ msg: "admin not found" });
-//   } else {
-//     let html = `<div >  
-//     <h1>hello ${data.username}</h1>
-//    <h2>admin verified</h2>
-   
-//  </div>`;
-//    await sendMail(email, "Verify", html)
-//     return res.status(200).json({ msg: "admin verified " });
-//   }
-// };
 const verifyAdmin = async (req, res) => {
   let { id } = req.params;
   try {
@@ -166,20 +153,46 @@ const verifyAdmin = async (req, res) => {
       { isVarified: true },
       { new: true }
     );
-    try {
-      await sendMail(
-        user.email,
-        "account approval",
-        "<h1>account approved</h1>"
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    // try {
+    //   await sendMail(
+    //     user.email,
+    //     "account approval",
+    //     "<h1>account approved</h1>"
+    //   );
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
     res.status(200).json({ msg: "verified" }, { user });
   } catch (error) {
     res.status(404).json({ err: error.message });
   }
 };
+
+const deleteAdmin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // try {
+    //   await sendMail(
+    //     user.email,
+    //     "Account Rejected",
+    //     "<h1>Your account was rejected</h1>"
+    //   );
+    // } catch (error) {
+    //   console.log("Error sending email:", error.message);
+    // }
+
+    return res.status(200).json({ msg: "Admin rejected successfully" });
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+};
+
 module.exports = {
   deletUser,
   signUp,
@@ -190,4 +203,5 @@ module.exports = {
   getUser,
   deletManyUser,
   verifyAdmin,
+  deleteAdmin,
 };

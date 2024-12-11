@@ -57,12 +57,12 @@ const userApi = {
       console.log(error.message);
     }
   },
-  verifyAdmin: async (id) => {
+  verifyadmin: async (id) => {
     try {
-      let req = await fetch(`${baseUrl}/user/verifyAdmin/${id}`, {
+      let req = await fetch(`${baseUrl}/user/verifyadmin/${id}`, {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${getToken}`,
+          Authorization: `Bearer ${getToken()}`,
         },
       });
       let res = await req.json();
@@ -71,6 +71,7 @@ const userApi = {
       console.log(error.message);
     }
   },
+  
 };
 
 export default userApi;
